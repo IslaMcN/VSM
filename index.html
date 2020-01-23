@@ -1,4 +1,13 @@
 <!doctype html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="index.css">
+      <title>Faux-Tube</title>
+    
+      <script src="fetchYouTube.js"></script>
+      
+    </head>
 
 
 <script src="https://apis.google.com/js/api.js"></script>
@@ -38,23 +47,18 @@
   });
 </script>
 <body>
-    <input type="text" id="search" placeholder="Looking for something. . .?"/>
-    <button onclick="authenticate().then(loadClient)">authorize and load</button>
-    <button onclick="execute()">execute</button>
-    <button type='submit'>Search</button>
+    <div>
+        <input type="text" id="search" placeholder="Looking for something. . .?"/>
+    </div>
+    <div class="buttons">
+        <button onclick="authenticate().then(loadClient)">authorize and load</button>
+        <button onclick="execute()">execute</button>
+        <button type='submit'>Search</button>
+    </div>
     <div id='results'></div>
 </body>
 
 <!-- <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Faux-Tube</title>
-
-  <script src="fetchYouTube.js"></script>
-  
-</head>
 
 <body>
     <input type="text" id="search" placeholder="Looking for something. . .?"/>
