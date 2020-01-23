@@ -6,10 +6,10 @@ console.log("search", search)
 
 let search_term = ' ';
 
-const fetchVideos = () => {
+const fetchVideos = async() => {
     gapi.client.setApiKey("AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M");
     return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-        .then(function() { console.log("GAPI client loaded for API"); },
+        .then(function(res) { console.log("GAPI client loaded for API", res); },
               function(err) { console.error("Error loading GAPI client for API", err); });
 }
 
