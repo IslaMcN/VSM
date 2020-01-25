@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="index.css" />
     <script src="https://apis.google.com/js/api.js"></script>
+    <title>Faux-Tube</title>
   </head>
   <body>
-    <div class="container">
-      <input type="text" placeholder="Looking for something?" />
-      <button onClick="loadClient()" class="search"></button>
+ 
+    <br />
+    <div id="content" class="container">
+      <div class="row">
+        <div class="col s6">
+          <form id="channel-form">
+            <div class="input-field col s6">
+              <input type="text" placeholder="Looking for something?" />
+              <button class="search"></button>
+            </div>
+          </form>
+        </div>
+        <div id='channel-data' class='col s6'></div>
+      </div>
+      <div class='row' id='video-container'></div>
     </div>
-    <script>
-      
-      function loadClient() {
-        gapi.client.setApiKey('AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M');
-        gapi.client.load('youtube', 'v3', function(){
-            search();
+    <script src="index.js">
+    function loadClient() {
+        gapi.setApiKey('AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M');
+        gapi.load('youtube', 'v3', function(){
+          fetch('https://www.googleapis.com/youtube/v3/search')
+          .then(res => {
+            console.log('response', res)
+            return(
+              res
+            )
+          })
         });
-        
+
       }
       function search(props){
           const q = props;
@@ -26,10 +47,14 @@
           });
           request.execute(function(res){
               const results = JSON.stringify(res.result);
-              
+
           })
       }
+      </script>
+   
 
-    </script>
+
+      
+    
   </body>
 </html>
