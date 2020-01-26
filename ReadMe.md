@@ -16,3 +16,12 @@ Note: your code will be judged based on:
 
 This doesn't have to be a 'polished' final product, but needs to be functional. 
 Feel free to use any css libraries or no css libraries at all.
+
+
+python -m SimpleHTTPServer 8000
+
+.force-ssl
+
+const y = JSON.stringify(response.result.items[0])
+        const x = document.getElementById('results').append(y)
+        return(x)
