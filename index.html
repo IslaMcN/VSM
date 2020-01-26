@@ -80,7 +80,12 @@
   gapi.load("client:auth2", function() {
     gapi.auth2.init({client_id: "912962213130-v1ioltfqepm193q2h5a0s98bddivooda.apps.googleusercontent.com"});
   });
-  
+  function viewCount(){
+
+  }
+  function date(){
+    
+  }
 </script>
 <nav>
   <button onclick="authenticate().then(loadClient)">Sign in With Google</button>
@@ -90,10 +95,10 @@
 <input  name="search" type='text' id='myinput' placeholder="Looking for something??">
 
 <button onclick="execute()">Search</button>
-<h3>Filter:</h3>
+<h3>Sort:</h3>
 <select>
-  <option value="viewCount">View Count</option>
-  <option value="date">Date</option>
+  <option onclick="viewCount()" value="viewCount">View Count</option>
+  <option onclick="date()" value="date">Date</option>
 </select>
 <div id='results'></div>
 
