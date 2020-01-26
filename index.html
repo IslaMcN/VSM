@@ -1,35 +1,68 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="index.css" />
-    <script src="https://apis.google.com/js/api.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <input type="text" placeholder="Looking for something?" />
-      <button onClick="loadClient()" class="search"></button>
-    </div>
-    <script>
-      
-      function loadClient() {
-        gapi.client.setApiKey('AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M');
-        gapi.client.load('youtube', 'v3', function(){
-            search();
-        });
-        
-      }
-      function search(props){
-          const q = props;
-          const request = gapi.client.youtube.search.list({
-              part: 'snippets',
-              maxResults: 10,
-          });
-          request.execute(function(res){
-              const results = JSON.stringify(res.result);
-              
-          })
-      }
+<body>
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+  /**
+   * Sample JavaScript code for youtube.search.list
+   * See instructions for running APIs Explorer code samples locally:
+   * https://developers.google.com/explorer-help/guides/code_samples#javascript
+   */
+   var GoogleAuth; // Google Auth object.
+  function initClient() {
+    gapi.client.init({
+      'apiKey': 'AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M',
+      'clientId': '611366885200-j84vif4m9qq6b8v36n8ad6eiebf6u6ok.apps.googleusercontent.com',
+      'scope': 'https://www.googleapis.com/auth/youtube.force-ssl',
+      'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
+    }).then(function () {
+      GoogleAuth = gapi.auth2.getAuthInstance();
 
-    </script>
-  </body>
-</html>
+      // Listen for sign-in state changes.
+      GoogleAuth.isSignedIn.listen(updateSigninStatus);
+  });
+}
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://www.googleapis.com/auth/youtube.force-ssl"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M");
+    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute() {
+    console.log('here')
+    return gapi.client.youtube.search.list({
+      "part": "snippet",
+      "order": "viewCount",
+      "q": "q",
+      "type": "video",
+      "videoDefinition": "high",
+      "maxResults": 10
+    })
+        .then(function(response) {
+          console.log("Response", response);
+          const y = JSON.stringify(response.result.items[0])
+         const x = document.getElementById('results').append(y)
+          return(x)
+                // Handle the results here (response.result has the parsed body).
+                
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+  gapi.load("client:auth2", function() {
+    gapi.auth2.init({client_id: "611366885200-j84vif4m9qq6b8v36n8ad6eiebf6u6ok.apps.googleusercontent.com"});
+  });
+  
+</script>
+<form type='submit'>
+<input  name="search" type='text' id='myinput' placeholder="Looking for something??">
+<button onclick="authenticate().then(loadClient)">authorize and load</button>
+<button type ="submit"onclick="execute()">execute</button>
+<div id='results'></div>
+</form>
+</body>
