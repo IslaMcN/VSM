@@ -55,10 +55,11 @@
         );
     }
 
-    // Make sure the client is loaded and sign-in is complete before calling this method.
+    //Set these as global variables so that I can use them in my sorting function
     var z;
     var g;
     function execute() {
+      //Input from the search bar
       const q = document.getElementById("myinput").value;
       return gapi.client.youtube.search
         .list({
@@ -81,14 +82,16 @@
               const title = document.createElement("h2");
               const video = document.createElement("img");
               const anchor = document.createElement('a');
-
+              //Creates link on thumbnail so that you can go watch the video on YouTube
               anchor.href = `https://www.youtube.com/watch?v=${vid.id.videoId}`
 
               date.setAttribute("id", "time");
               title.setAttribute("class", "title");
               video.setAttribute("class", "video");
+              //Makes the class of the div have the date for each individual video
+              //I was hoping to somehow sort the classes since sorting the innerHTML wasn't working
               date.setAttribute('class', vid.snippet.publishedAt);
-
+              //Gives a readable date
               date.textContent = new Date(vid.snippet.publishedAt)
                 .toISOString()
                 .slice(0, 10);
@@ -109,7 +112,7 @@
               g = date
               return x;
             });
-            // Handle the results here (response.result has the parsed body).
+           
           },
           function(err) {
             console.error("Execute error", err);

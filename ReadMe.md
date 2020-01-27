@@ -16,17 +16,10 @@ You must sign in with a Google account in order to use the search functionality.
 # Note:
 I understand that have a sort functionality was part of the Minimum Viable Product for this project. I, however, failed in figuring out a way of doing so. I tried every algorithm I could find and think of. I even tried to just make another call to the API just to make a first pass. For some reason, I could never make it work. 
 
-If this disqualifies me from going forward with the hiring process, I understand. However, could you please email me and tell me what is wrong with my code and why the sort function isn't working? This is not me being upset or anything, I have just spent so much time on 
+If this disqualifies me from going forward with the hiring process, I understand.
 
 
-
-
-
-
-
-
-
-
+## Instructions :
 
 
 1) Plain JavaScript only (no frameworks/libraries of any kind please: no jQuery, no React, Angular, etc.), 
