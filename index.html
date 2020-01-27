@@ -1,68 +1,186 @@
 <body>
-<script src="https://apis.google.com/js/api.js"></script>
-<script>
-  /**
-   * Sample JavaScript code for youtube.search.list
-   * See instructions for running APIs Explorer code samples locally:
-   * https://developers.google.com/explorer-help/guides/code_samples#javascript
-   */
-   var GoogleAuth; // Google Auth object.
-  function initClient() {
-    gapi.client.init({
-      'apiKey': 'AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M',
-      'clientId': '611366885200-j84vif4m9qq6b8v36n8ad6eiebf6u6ok.apps.googleusercontent.com',
-      'scope': 'https://www.googleapis.com/auth/youtube.force-ssl',
-      'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
-    }).then(function () {
-      GoogleAuth = gapi.auth2.getAuthInstance();
+  <head>
+      <link rel="stylesheet" href="index.css">
+  </head>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    /**
+     * Sample JavaScript code for youtube.search.list
+     * See instructions for running APIs Explorer code samples locally:
+     * https://developers.google.com/explorer-help/guides/code_samples#javascript
+     */
+    var GoogleAuth; // Google Auth object.
+    function initClient() {
+      gapi.client
+        .init({
+          apiKey: "AIzaSyCr48z1HGsV6Mp439otEBhoQlZZgQRkdos",
+          clientId:
+            "912962213130-v1ioltfqepm193q2h5a0s98bddivooda.apps.googleusercontent.com",
+          scope: "https://www.googleapis.com/auth/youtube.force-ssl",
+          discoveryDocs: [
+            "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"
+          ]
+        })
+        .then(function() {
+          GoogleAuth = gapi.auth2.getAuthInstance();
 
-      // Listen for sign-in state changes.
-      GoogleAuth.isSignedIn.listen(updateSigninStatus);
-  });
-}
-  function authenticate() {
-    return gapi.auth2.getAuthInstance()
-        .signIn({scope: "https://www.googleapis.com/auth/youtube.force-ssl"})
-        .then(function() { console.log("Sign-in successful"); },
-              function(err) { console.error("Error signing in", err); });
-  }
-  function loadClient() {
-    gapi.client.setApiKey("AIzaSyCDdyLv75rdn0yq9VDYS1Lu9lEWbjnto_M");
-    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-        .then(function() { console.log("GAPI client loaded for API"); },
-              function(err) { console.error("Error loading GAPI client for API", err); });
-  }
+          // Listen for sign-in state changes.
+          GoogleAuth.isSignedIn.listen(updateSigninStatus);
+        });
+    }
+    function authenticate() {
+      return gapi.auth2
+        .getAuthInstance()
+        .signIn({ scope: "https://www.googleapis.com/auth/youtube.force-ssl" })
+        .then(
+          function() {
+            console.log("Sign-in successful");
+          },
+          function(err) {
+            console.error("Error signing in", err);
+          }
+        );
+    }
+    function loadClient() {
+      gapi.client.setApiKey("AIzaSyCr48z1HGsV6Mp439otEBhoQlZZgQRkdos");
+      return gapi.client
+        .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(
+          function() {
+            console.log("GAPI client loaded for API");
+          },
+          function(err) {
+            console.error("Error loading GAPI client for API", err);
+          }
+        );
+    }
+
+    //Set these as global variables so that I can use them in my sorting function
+    var z;
+    var g;
+    function execute() {
+      //Input from the search bar
+      const q = document.getElementById("myinput").value;
+      return gapi.client.youtube.search
+        .list({
+          part: "snippet",
+          order: "viewCount",
+          q: q,
+          type: "video",
+          videoDefinition: "high",
+          maxResults: 10
+        })
+
+        .then(
+          function(response) {
+            z = response.result.items;
+            
+
+            return z.map(vid => {
+              console.log(vid)
+              const date = document.createElement("div");
+              const title = document.createElement("h2");
+              const video = document.createElement("img");
+              const anchor = document.createElement('a');
+              //Creates link on thumbnail so that you can go watch the video on YouTube
+              anchor.href = `https://www.youtube.com/watch?v=${vid.id.videoId}`
+
+              date.setAttribute("id", "time");
+              title.setAttribute("class", "title");
+              video.setAttribute("class", "video");
+              //Makes the class of the div have the date for each individual video
+              //I was hoping to somehow sort the classes since sorting the innerHTML wasn't working
+              date.setAttribute('class', vid.snippet.publishedAt);
+              //Gives a readable date
+              date.textContent = new Date(vid.snippet.publishedAt)
+                .toISOString()
+                .slice(0, 10);
+              title.textContent = vid.snippet.title;
+
+              video.src = vid.snippet.thumbnails.medium.url
+              anchor.appendChild(video)
+              console.log(anchor)
+
+              const x = document.getElementById("results");
+
+              x.append(date);
+              x.append(title);
+              x.append(anchor);
+
+              const w = document.getElementById("date");
+              const v = document.getElementById("view");
+              g = date
+              return x;
+            });
+           
+          },
+          function(err) {
+            console.error("Execute error", err);
+          }
+        );
+    }
+    gapi.load("client:auth2", function() {
+      gapi.auth2.init({
+        client_id:
+          "912962213130-v1ioltfqepm193q2h5a0s98bddivooda.apps.googleusercontent.com"
+      });
+    });
+
+//Commented out due to it being a known bug. did not want it to effect other functionalities
+
+//     function swap(arr, first_Index, second_Index){
+//       var temp = arr[first_Index];
+//       arr[first_Index] = arr[second_Index];
+//       arr[second_Index] = temp;
+//     }
+//     function sorting() {
+//       //sorting date
+      
+//       var itemsArr = [];
+//       for (var i in g) {
+//         if (g[i] == 1) {
+          
+//           itemsArr.push(g[i]);
+//         }
+//       }
+//       var len = itemsArr.length,
+//         n, j, stop;
+//       for(n=0; n< len; i++){
+//         for(j=0, stop=len-n; j< stop; j++){
+//           if(itemsArr[j] >  itemsArr[j+1]){
+//             swap(itemsArr, j, j+1);
+//           }
+//     }
+//   }
+//   return itemsArr
+// }
+  </script>
+  <section>
+  <nav >
+    <button onclick="authenticate().then(loadClient)">
+      Sign in With Google
+    </button>
+    <h1 style="color:whitesmoke">Welcome to My Take Home Test!</h1>
+  </nav>
+  <p style="color:whitesmoke" >
+    Please sign in with Google before trying to search. I tried to make it
+    possible to search without signing in but due to time constraints I was
+    unable to. If I had a future release for this project, I would implement a
+    feature of NOT needing to be signed in.
+  </p>
+  <input
+    name="search"
+    type="text"
+    id="myinput"
+    placeholder="Looking for something??"
+  />
+
+  <button class="search" onclick="execute()"></button>
+  <!-- <h3 style="color:whitesmoke">Sort:</h3>
+
+  <button onclick="execute.b()" id="view" value="viewCount">View Count</button>
+  <button onclick="sorting()" id="date">Date</button> -->
+
+  <div style="color:whitesmoke" id="results"></div>
   
-  // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute() {
-    console.log('here')
-    return gapi.client.youtube.search.list({
-      "part": "snippet",
-      "order": "viewCount",
-      "q": "q",
-      "type": "video",
-      "videoDefinition": "high",
-      "maxResults": 10
-    })
-        .then(function(response) {
-          console.log("Response", response);
-          const y = JSON.stringify(response.result.items[0])
-         const x = document.getElementById('results').append(y)
-          return(x)
-                // Handle the results here (response.result has the parsed body).
-                
-              },
-              function(err) { console.error("Execute error", err); });
-  }
-  gapi.load("client:auth2", function() {
-    gapi.auth2.init({client_id: "611366885200-j84vif4m9qq6b8v36n8ad6eiebf6u6ok.apps.googleusercontent.com"});
-  });
-  
-</script>
-<form type='submit'>
-<input  name="search" type='text' id='myinput' placeholder="Looking for something??">
-<button onclick="authenticate().then(loadClient)">authorize and load</button>
-<button type ="submit"onclick="execute()">execute</button>
-<div id='results'></div>
-</form>
 </body>
